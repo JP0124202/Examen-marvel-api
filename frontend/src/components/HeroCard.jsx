@@ -2,9 +2,13 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 export default function HeroCard({ hero, onDelete, showActions=true }) {
+  function handleImgError(e){
+    e.target.src = 'https://via.placeholder.com/300x200?text=No+Image'
+  }
+
   return (
     <div className="hero-card">
-      <img src={hero.imagen_url || 'https://via.placeholder.com/150'} alt={hero.nombre} />
+      <img src={hero.imagen_url || 'https://via.placeholder.com/300x200?text=No+Image'} alt={hero.nombre} onError={handleImgError} />
       <div className="hero-body">
         <h3>{hero.nombre}</h3>
         <p className="real">{hero.nombre_real}</p>

@@ -1,33 +1,33 @@
 import React from 'react'
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
 
-function Navbar({ user, onLogout }) {
+function Sidebar({ user, onLogout }){
   return (
-    <header className="navbar">
-      <div className="brand">Marvel API</div>
-      <nav>
-        <NavLink to="/">Dashboard</NavLink>
+    <aside className="sidebar">
+      <div className="brand">MARVEL API</div>
+      <nav className="menu">
+        <NavLink to="/" end>Dashboard</NavLink>
         <NavLink to="/heroes">Héroes</NavLink>
         <NavLink to="/misiones">Misiones</NavLink>
       </nav>
-      <div className="user">
-        <div className="user-info">{user?.nombre} ({user?.rol})</div>
-        <button className="btn" onClick={onLogout}>Cerrar sesión</button>
+      <div className="sidebar-footer">
+        <div className="user-name">{user?.nombre}</div>
+        <div className="user-role">{user?.rol}</div>
+        <button className="btn small" onClick={onLogout}>Cerrar sesión</button>
       </div>
-    </header>
+    </aside>
   )
 }
 
-export default function Layout() {
+export default function Layout(){
   const navigate = useNavigate()
   const stored = localStorage.getItem('user')
   const user = stored ? JSON.parse(stored) : null
 
-  function handleLogout() {
-    // call backend logout then clear
+  function handleLogout(){
     fetch('http://localhost:3000/api/auth/logout', { method: 'POST', headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } })
-      .catch(() => {})
-      .finally(() => {
+      .catch(()=>{})
+      .finally(()=>{
         localStorage.removeItem('token')
         localStorage.removeItem('user')
         navigate('/login')
@@ -35,11 +35,19 @@ export default function Layout() {
   }
 
   return (
-    <div className="app">
-      <Navbar user={user} onLogout={handleLogout} />
-      <main className="container">
-        <Outlet />
-      </main>
+    <div className="app-layout">
+      <Sidebar user={user} onLogout={handleLogout} />
+      <div className="main-area">
+        <header className="topbar">
+          <div className="top-left">MARVEL API</div>
+          <div className="top-right">
+            <div className="user-info">{user?.nombre} <span className="muted">({user?.rol})</span></div>
+          </div>
+        </header>
+        <main className="container">
+          <Outlet />
+        </main>
+      </div>
     </div>
   )
 }

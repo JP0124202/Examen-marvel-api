@@ -23,7 +23,7 @@ export default function HeroDetail() {
     <div className="card">
       <button className="btn" onClick={() => navigate(-1)}>Volver</button>
       <div className="detail">
-        <img src={hero.imagen_url || 'https://via.placeholder.com/300'} alt={hero.nombre} />
+        <img src={hero.imagen_url || 'https://via.placeholder.com/300x300?text=No+Image'} alt={hero.nombre} onError={(e)=>e.target.src='https://via.placeholder.com/300x300?text=No+Image'} />
         <div>
           <h2>{hero.nombre}</h2>
           <p><b>Nombre real:</b> {hero.nombre_real}</p>

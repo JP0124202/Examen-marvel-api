@@ -42,6 +42,13 @@ export default function HeroForm() {
         <input type="number" min={1} max={100} value={form.nivel_poder} onChange={e => setForm({...form, nivel_poder: Number(e.target.value)})} />
         <label>Imagen URL</label>
         <input value={form.imagen_url} onChange={e => setForm({...form, imagen_url: e.target.value})} />
+        {form.imagen_url && (
+          <div style={{marginBottom:12}}>
+            <div className="card" style={{padding:8}}>
+              <img src={form.imagen_url} alt="preview" style={{width:200,height:120,objectFit:'cover',borderRadius:6}} onError={(e)=>e.target.src='https://via.placeholder.com/300x200?text=No+Image'} />
+            </div>
+          </div>
+        )}
         <label>Estado</label>
         <select value={form.estado} onChange={e => setForm({...form, estado: e.target.value})}>
           <option value="ACTIVO">ACTIVO</option>
