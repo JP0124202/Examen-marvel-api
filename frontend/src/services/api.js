@@ -12,4 +12,12 @@ api.interceptors.request.use(config => {
   return config
 })
 
+// optional: normalize errors
+api.interceptors.response.use(r=>r, err => {
+  if (err.response && err.response.data && err.response.data.error) {
+    return Promise.reject(err)
+  }
+  return Promise.reject(err)
+})
+
 export default api

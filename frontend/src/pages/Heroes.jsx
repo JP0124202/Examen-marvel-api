@@ -35,7 +35,7 @@ export default function Heroes() {
     }
   }
 
-  const filtered = heroes ? heroes.filter(h => h.nombre.toLowerCase().includes(query.toLowerCase())) : []
+  const filtered = (heroes || []).filter(h => (h.nombre || '').toLowerCase().includes(query.toLowerCase()))
 
   return (
     <div>
@@ -49,13 +49,19 @@ export default function Heroes() {
 
       {loading && <p>Cargando...</p>}
       {error && <p className="error">{error}</p>}
-      {!loading && heroes && heroes.length === 0 && <p>No hay superhéroes registrados.</p>}
+      {!loading && !error && heroes && heroes.length === 0 && <p>No hay superhéroes registrados.</p>}
 
-      <div className="grid">
-        {filtered.map(h => (
-          <HeroCard key={h.id} hero={h} onDelete={user?.rol === 'ADMIN' ? handleDelete : null} showActions={user?.rol === 'ADMIN'} />
-        ))}
-      </div>
+      {!loading && !error && (
+        filtered.length === 0 ? (
+          <p>{query ? 'No se encontraron superhéroes.' : 'No hay superhéroes registrados.'}</p>
+        ) : (
+          <div className="grid product-grid">
+            {filtered.map(h => (
+              <HeroCard key={h.id} hero={h} onDelete={user?.rol === 'ADMIN' ? handleDelete : null} showActions={user?.rol === 'ADMIN'} />
+            ))}
+          </div>
+        )
+      )}
     </div>
   )
 }

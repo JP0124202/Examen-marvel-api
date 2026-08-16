@@ -30,26 +30,29 @@ export default function Misiones() {
       {!loading && misiones && misiones.length === 0 && <p>No hay misiones registradas.</p>}
 
       <div className="list">
-        {misiones && misiones.map(m => (
-          <div key={m.id} className="card mission">
-            <h3>{m.titulo || '—'}</h3>
-            <p className="muted">{m.descripcion || 'Sin descripción'}</p>
-            <div className="mission-meta">
-              <span><b>Ubicación:</b> {m.ubicacion || '—'}</span>
-              <span><b>Fecha:</b> {m.fecha || '—'}</span>
-            </div>
-            <div className="mission-meta">
-              <span className={`badge danger`}>{m.nivel_peligro || '—'}</span>
-              <span className={`badge`}>{m.estado || '—'}</span>
-            </div>
-            <p><b>Superhéroe:</b> {m.superheroe_nombre || '—'}</p>
-            {user?.rol === 'ADMIN' && (
-              <div style={{marginTop:8}}>
-                <Link to={`/misiones/${m.id}/editar`} className="btn small">Editar</Link>
+        {misiones && misiones.map(m => {
+          const fecha = m.fecha ? (()=>{ try{ return new Date(m.fecha).toLocaleDateString('es-ES') }catch(e){ return m.fecha } })() : '—'
+          return (
+            <div key={m.id} className="card mission mission-card">
+              <h3>{m.titulo || '—'}</h3>
+              <p className="muted">{m.descripcion || 'Sin descripción'}</p>
+              <div className="mission-meta">
+                <span><b>Ubicación:</b> {m.ubicacion || '—'}</span>
+                <span><b>Fecha:</b> {fecha}</span>
               </div>
-            )}
-          </div>
-        ))}
+              <div className="mission-meta">
+                <span className={`badge level ${m.nivel_peligro || ''}`}>{m.nivel_peligro || '—'}</span>
+                <span className={`badge state ${m.estado || ''}`}>{m.estado || '—'}</span>
+              </div>
+              <p><b>Superhéroe:</b> {m.superheroe_nombre || '—'}</p>
+              {user?.rol === 'ADMIN' && (
+                <div style={{marginTop:8}}>
+                  <Link to={`/misiones/${m.id}/editar`} className="btn small">Editar</Link>
+                </div>
+              )}
+            </div>
+          )
+        })}
       </div>
     </div>
   )

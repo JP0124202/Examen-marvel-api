@@ -6,9 +6,9 @@ function Sidebar({ user, onLogout }){
     <aside className="sidebar">
       <div className="brand">MARVEL API</div>
       <nav className="menu">
-        <NavLink to="/" end>Dashboard</NavLink>
-        <NavLink to="/heroes">Héroes</NavLink>
-        <NavLink to="/misiones">Misiones</NavLink>
+        <NavLink to="/" end className={({isActive})=> isActive ? 'active' : ''}>Dashboard</NavLink>
+        <NavLink to="/heroes" className={({isActive})=> isActive ? 'active' : ''}>Héroes</NavLink>
+        <NavLink to="/misiones" className={({isActive})=> isActive ? 'active' : ''}>Misiones</NavLink>
       </nav>
       <div className="sidebar-footer">
         <div className="user-name">{user?.nombre}</div>

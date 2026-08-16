@@ -36,11 +36,13 @@ export default function MisionForm(){
       const res = await api.get(`/misiones/${id}`)
       const data = res.data.data
       // map fields
+      // convert fecha ISO -> yyyy-mm-dd for input[type=date]
+      const fechaVal = data.fecha ? (data.fecha.split && data.fecha.includes('T') ? data.fecha.split('T')[0] : data.fecha) : ''
       setForm({
         titulo: data.titulo || '',
         descripcion: data.descripcion || '',
         ubicacion: data.ubicacion || '',
-        fecha: data.fecha || '',
+        fecha: fechaVal,
         nivel_peligro: data.nivel_peligro || 'BAJO',
         estado: data.estado || 'PENDIENTE',
         superheroe_id: data.superheroe_id ? String(data.superheroe_id) : ''
@@ -85,33 +87,53 @@ export default function MisionForm(){
       {error && <div className="alert">{error}</div>}
       {loading && <p>Cargando...</p>}
       <form onSubmit={handleSubmit}>
-        <label>Título</label>
-        <input value={form.titulo} onChange={e=>setForm({...form, titulo:e.target.value})} />
+        <div className="form-grid">
+          <div className="full">
+            <label>Título</label>
+            <input value={form.titulo} onChange={e=>setForm({...form, titulo:e.target.value})} />
+          </div>
 
-        <label>Descripción</label>
-        <textarea value={form.descripcion} onChange={e=>setForm({...form, descripcion:e.target.value})} />
+          <div className="full">
+            <label>Descripción</label>
+            <textarea value={form.descripcion} onChange={e=>setForm({...form, descripcion:e.target.value})} />
+          </div>
 
-        <label>Ubicación</label>
-        <input value={form.ubicacion} onChange={e=>setForm({...form, ubicacion:e.target.value})} />
+          <div>
+            <label>Ubicación</label>
+            <input value={form.ubicacion} onChange={e=>setForm({...form, ubicacion:e.target.value})} />
+          </div>
 
-        <label>Fecha</label>
-        <input type="date" value={form.fecha} onChange={e=>setForm({...form, fecha:e.target.value})} />
+          <div>
+            <label>Fecha</label>
+            <input type="date" value={form.fecha} onChange={e=>setForm({...form, fecha:e.target.value})} />
+          </div>
 
-        <label>Nivel de peligro</label>
-        <select value={form.nivel_peligro} onChange={e=>setForm({...form, nivel_peligro:e.target.value})}>
-          {niveles.map(n=> <option key={n} value={n}>{n}</option>)}
-        </select>
+          <div>
+            <label>Nivel de peligro</label>
+            <select value={form.nivel_peligro} onChange={e=>setForm({...form, nivel_peligro:e.target.value})}>
+              {niveles.map(n=> <option key={n} value={n}>{n}</option>)}
+            </select>
+          </div>
 
-        <label>Estado</label>
-        <select value={form.estado} onChange={e=>setForm({...form, estado:e.target.value})}>
-          {estados.map(s=> <option key={s} value={s}>{s}</option>)}
-        </select>
+          <div>
+            <label>Estado</label>
+            <select value={form.estado} onChange={e=>setForm({...form, estado:e.target.value})}>
+              {estados.map(s=> <option key={s} value={s}>{s}</option>)}
+            </select>
+          </div>
 
-        <label>Superhéroe</label>
-        <select value={form.superheroe_id} onChange={e=>setForm({...form, superheroe_id:e.target.value})}>
-          <option value="">-- Seleccione --</option>
-          {heroes.map(h=> <option key={h.id} value={String(h.id)}>{h.nombre}</option>)}
-        </select>
+          <div className="full">
+            <label>Superhéroe</label>
+            <select value={form.superheroe_id} onChange={e=>setForm({...form, superheroe_id:e.target.value})}>
+              <option value="">-- Seleccione --</option>
+              {heroes.length === 0 ? (
+                <option value="" disabled>No hay superhéroes disponibles para asignar.</option>
+              ) : (
+                heroes.map(h=> <option key={h.id} value={String(h.id)}>{h.nombre}</option>)
+              )}
+            </select>
+          </div>
+        </div>
 
         <div className="form-actions">
           <button className="btn" disabled={loading}>{loading ? 'Guardando...' : 'Guardar'}</button>
