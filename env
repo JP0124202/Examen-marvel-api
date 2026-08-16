@@ -1,0 +1,10 @@
+PORT=3000
+
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=root
+DB_PASSWORD=
+DB_NAME=mundial_api
+
+JWT_SECRET=mundial_api_jwt_super_secreto_2026
+JWT_EXPIRES_IN=1h
